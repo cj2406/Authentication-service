@@ -16,3 +16,21 @@ export async function register(request:Request,response:Response){
     }
     
 }
+export async function login(req: Request, res: Response) {
+  try {
+    const { email, password } = req.body
+
+    const user = await AuthService.login(email, password)
+
+    res.json({
+      message: "Login successful",
+      ...user
+    })
+  } catch (error) {
+    console.error(error)
+
+    res.status(401).json({
+      message: "Invalid email or password"
+    })
+  }
+}
