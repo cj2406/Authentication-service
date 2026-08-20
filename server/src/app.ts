@@ -4,11 +4,12 @@ import prisma from "./db/prisma.js"
 import cors from "cors"
 
 import authRoute from "./auth/routes/AuthRoute.js"
+import userRoutes from "./user/routes/user.route.js"
 
 const app = express()
 app.use(cors({ origin: "http://localhost:5173" }))
 app.use(express.json())
-
+app.use("/api/users", userRoutes)
 app.use("/api/auth", authRoute)
 
 app.get("/api/test-db", async (req, res) => {

@@ -1,8 +1,20 @@
-import jwt from "jsonwebtoken";
+import jwt from "jsonwebtoken"
 
-const secretKey =process.env.JWT_SECRET_KEY!
+const secretKey = process.env.JWT_SECRET_KEY
 
 export function createAccessToken(userId: string): string {
-    return jwt.sign({ userId,type:"access" }, secretKey, { expiresIn: "15min" });
-}
+  if (!secretKey) {
+    throw new Error("JWT_SECRET_KEY is not configured")
+  }
 
+  return jwt.sign(
+    {
+      type: "access",
+    },
+    secretKey,
+    {
+      subject: userId,
+      expiresIn: "15m",
+    }
+  )
+}
