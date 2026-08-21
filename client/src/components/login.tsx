@@ -1,6 +1,5 @@
 import { useState } from "react"
 import type { SyntheticEvent } from "react"
-import { apiClient, authApi } from "../dependency/dependency"
 import { setAccessToken } from "../auth/authstore"
 
 import "./login.css"
@@ -25,11 +24,8 @@ function Login() {
 
       setAccessToken(result.accessToken)
       console.log("Access token:", result.accessToken)
-      const me = await apiClient.get("/users/me")
+      
 
-      console.log("Authenticated user:", me.data)
-
-      console.log("Logged in:", result.user)
     } catch (error) {
       console.error(error)
       setError("Invalid email or password")
