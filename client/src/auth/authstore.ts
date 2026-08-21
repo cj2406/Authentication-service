@@ -6,6 +6,6 @@ export  function getAccessToken(){
 export function setAccessToken(token:string){
     accessToken=token
 }
-export default function clearAccessToken(){
+export  function clearAccessToken(){
     accessToken=null
 }
