@@ -24,6 +24,7 @@ class AuthApi {
         password
       }
     )
+    
 
     return response.data
   }
