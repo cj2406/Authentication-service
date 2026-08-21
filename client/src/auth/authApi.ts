@@ -1,4 +1,4 @@
-import ApiClient from "../api/ApiClient"
+import type HttpClient from "./HttpClient"
 
 type LoginResponse = {
   message: string
@@ -10,9 +10,9 @@ type LoginResponse = {
 }
 
 class AuthApi {
-  private readonly api: ApiClient
+  private readonly api: HttpClient
 
-  constructor(api: ApiClient) {
+  constructor(api: HttpClient) {
     this.api = api
   }
 
@@ -24,6 +24,7 @@ class AuthApi {
         password
       }
     )
+    
 
     return response.data
   }
