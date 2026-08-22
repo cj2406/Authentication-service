@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import Login from "./components/login"
 import { apiClient } from "./dependency/dependency"
+
 type TestResponse = {
   message: string
 }
@@ -8,22 +9,26 @@ type TestResponse = {
 function App() {
   const [message, setMessage] = useState("Connecting...")
 
-  useEffect(() => {
-    console.log("1. useEffect is running")
+  const [checkingSession, setCheckingSession] = useState(true)
 
-    console.log("2. ApiClient ready")
+  useEffect(() => {
+    apiClient
+      .refreshAccessToken()
+      .finally(() => setCheckingSession(false))
+  }, [])
+
+  useEffect(() => {
+    if (checkingSession) return
 
     apiClient
       .get<TestResponse>("/test")
-      .then((response) => {
-        console.log("3. API response:", response.data)
-        setMessage(response.data.message)
-      })
-      .catch((error) => {
-        console.error("4. API error:", error)
-        setMessage("Failed to connect to API")
-      })
-  }, [])
+      .then((response) => setMessage(response.data.message))
+      .catch(() => setMessage("Failed to connect to API"))
+  }, [checkingSession])
+
+  if (checkingSession) {
+    return <p>Loading...</p>
+  }
 
   return (
     <main>
