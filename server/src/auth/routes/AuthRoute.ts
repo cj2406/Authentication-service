@@ -1,11 +1,13 @@
 import { Router } from "express";
 import { register,login,refresh } from "../controller/AuthController.js";
 import authRateLimiter from "../../middleware/authratelimiter.js";
+import { registerSchema,loginSchema } from "../validation/authSchema.js";
+import { validate } from "../../middleware/validate.js";
 
 const router=Router()
 
-router.post("/register",authRateLimiter,register)
-router.post("/login", authRateLimiter, login)
+router.post("/register",authRateLimiter,validate(registerSchema),register)
+router.post("/login", authRateLimiter,validate(loginSchema), login)
 router.post("/refresh",authRateLimiter,refresh)
 
 

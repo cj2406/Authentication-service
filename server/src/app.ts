@@ -6,6 +6,7 @@ import cookieParser from "cookie-parser"
 
 import authRoute from "./auth/routes/AuthRoute.js"
 import userRoutes from "./user/routes/user.route.js"
+import { errorHandler } from "./middleware/errorhandler.js"
 
 const app = express()
 app.use(cookieParser())
@@ -13,6 +14,7 @@ app.use(cors({ origin: "http://localhost:5173",credentials: true }))
 app.use(express.json())
 app.use("/api/users", userRoutes)
 app.use("/api/auth", authRoute)
+app.use(errorHandler)
 
 app.get("/api/test-db", async (req, res) => {
   try {

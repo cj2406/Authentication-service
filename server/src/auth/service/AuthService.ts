@@ -2,6 +2,7 @@ import argon2 from "argon2";
 import prisma from "../../db/prisma.js";
 import { createAccessToken } from "../../utils/tokens.js"
 import { generateRefreshToken, hashRefreshToken, verifyRefreshToken } from "../../utils/refreshTokens.js";
+import { AppError } from "../../errors/AppError.js";
 
 class AuthService{
     async register(email:string, password:string) {
@@ -12,7 +13,7 @@ class AuthService{
         })
 
         if(existingUser){
-            throw new Error("user already exists")
+            throw new AppError("user already exists")
         }
 
         const passwordHash=await argon2.hash(password)
@@ -38,7 +39,7 @@ class AuthService{
         })
 
         if(!user){
-            throw new Error("Invalid email or password")
+            throw new AppError("Invalid email or password")
         }
         const validPassword=await argon2.verify(
             user.passwordHash,
@@ -46,7 +47,7 @@ class AuthService{
         )
 
         if(!validPassword){
-            throw new Error("Invalid email or password")
+            throw new AppError("Invalid email or password")
         }
        const accessToken = createAccessToken(user.id)
 
@@ -97,7 +98,7 @@ class AuthService{
         }
 
         if (!storedToken) {
-            throw new Error("Invalid refresh token")
+            throw new AppError("Invalid refresh token")
         }
 
         // Revoke the token we just used
