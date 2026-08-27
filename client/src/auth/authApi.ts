@@ -9,6 +9,14 @@ type LoginResponse = {
   }
 }
 
+type RegisterResponse = {
+  message: string
+  user: {
+    id: string
+    email: string
+  }
+}
+
 class AuthApi {
   private readonly api: HttpClient
 
@@ -27,6 +35,19 @@ class AuthApi {
     
 
     return response.data
+  }
+
+  async register(email: string, password: string) {
+    const response = await this.api.post<RegisterResponse>(
+      "/auth/register",
+      { email, password }
+    )
+
+    return response.data
+  }
+
+  async logout() {
+    await this.api.post("/auth/logout")
   }
 }
 

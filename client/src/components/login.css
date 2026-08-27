@@ -3,8 +3,11 @@
   max-width: 400px;
   margin: 40px auto;
   padding: 24px;
+  box-sizing: border-box;
+  background: #fff;
   border: 1px solid #ddd;
   border-radius: 8px;
+  text-align: left;
 }
 
 .login h2 {
@@ -26,6 +29,7 @@
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 4px;
+  font: inherit;
 }
 
 .login button {
@@ -34,8 +38,26 @@
   border: none;
   border-radius: 4px;
   cursor: pointer;
+  font: inherit;
+  background: #222;
+  color: #fff;
+}
+
+.login button:disabled {
+  cursor: wait;
+  opacity: 0.6;
+}
+
+.login-secondary-button {
+  margin-top: 10px;
+  background: transparent;
+  color: #3457d5;
 }
 
 .login-error {
   margin-top: 12px;
+}
+
+.login-success {
+  margin: 0 0 16px;
 }

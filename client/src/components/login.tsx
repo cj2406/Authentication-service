@@ -6,16 +6,26 @@ import { setAccessToken } from "../auth/authstore"
 import "./login.css"
 
 
-function Login() {
-  const [email, setEmail] = useState("")
+type LoginProps = {
+  onSwitchToRegister: () => void
+  onLoginSuccess: () => void
+  initialEmail?: string
+}
+
+function Login({ onSwitchToRegister, onLoginSuccess, initialEmail = "" }: LoginProps) {
+  const [email, setEmail] = useState(initialEmail)
   const [password, setPassword] = useState("")
   const [error, setError] = useState("")
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   async function handleSubmit(
     event: SyntheticEvent<HTMLFormElement>
   ) {
     event.preventDefault()
+    if (isSubmitting) return
+
     setError("")
+    setIsSubmitting(true)
 
     try {
       const result = await authApi.login(
@@ -24,12 +34,20 @@ function Login() {
       )
 
       setAccessToken(result.accessToken)
-      console.log("Access token:", result.accessToken)
-      
+      onLoginSuccess()
 
     } catch (error) {
       console.error(error)
+      if (error && typeof error === "object" && "response" in error) {
+        const response = error.response
+        if (response && typeof response === "object" && "status" in response && response.status === 429) {
+          setError("Too many attempts. Please try again later.")
+          return
+        }
+      }
       setError("Invalid email or password")
+    } finally {
+      setIsSubmitting(false)
     }
   }
 
@@ -65,8 +83,12 @@ function Login() {
     />
   </div>
 
-  <button type="submit">
-    Login
+  <button type="submit" disabled={isSubmitting}>
+    {isSubmitting ? "Logging in..." : "Login"}
+  </button>
+
+  <button className="login-secondary-button" type="button" onClick={onSwitchToRegister}>
+    Create an account
   </button>
 
   {error && (
