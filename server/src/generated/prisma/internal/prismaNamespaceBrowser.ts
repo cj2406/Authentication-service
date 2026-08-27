@@ -84,6 +84,7 @@ export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof User
 
 export const RefreshTokenScalarFieldEnum = {
   id: 'id',
+  selector: 'selector',
   tokenHash: 'tokenHash',
   userId: 'userId',
   expiresAt: 'expiresAt',
